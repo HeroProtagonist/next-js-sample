@@ -10,7 +10,6 @@ const actionTypes = {
 
 // REDUCERS
 const showList = (state = null, action) => {
-  console.log(action)
   switch (action.type) {
     case actionTypes.SHOW_LIST_SUCCESS:
       return action.list
@@ -22,11 +21,7 @@ const showList = (state = null, action) => {
 const showDetails = (state = null, action) => {
   switch (action.type) {
     case actionTypes.SHOW_DETAILS_SUCCESS:
-      return Object.assign(
-        {},
-        state,
-        {}//{ [action.showId]: {action.showDetails, action.showImage} }
-      )
+      return { ...state, [action.id]: action.show }
     default:
       return state
   }
@@ -44,12 +39,15 @@ export const updateShowList = () => async dispatch => {
 }
 
 
-export const updateShowDetails = detaild => dispatch => {
+export const updateShowDetails = id => async dispatch => {
+
+  const res = await fetch(`https://api.tvmaze.com/shows/${id}`)
+  const show = await res.json()
+
   return dispatch({
-    type: actionTypes.SHOW_LIST_SUCCESS,
-    showDetails: detailed,
-    showImage: detailed,
-    showId: detailed,
+    type: actionTypes.SHOW_DETAILS_SUCCESS,
+    show,
+    id,
   })
 }
 
