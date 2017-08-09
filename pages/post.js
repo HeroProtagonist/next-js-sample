@@ -1,29 +1,12 @@
-// import Layout from '../components/Layout.js'
-// import fetch from 'isomorphic-unfetch'
-
-// const Post =  (props) => (
-//     <Layout>
-//        <h1>{props.show.name}</h1>
-//        <p>{props.show.summary.replace(/<[/]?p>/g, '')}</p>
-//        <img src={props.show.image.medium}/>
-//     </Layout>
-// )
-
-// Post.getInitialProps = async function (context) {
-//   const { id } = context.query
-//   const res = await fetch(`https://api.tvmaze.com/shows/${id}`)
-//   const show = await res.json()
-
-//   console.log(`Fetched show: ${show.name}`)
-
-//   return { show }
-// }
-
-// export default Post
-
 import Layout from '../components/Layout.js'
-import Markdown from 'react-markdown'
 import fetch from 'isomorphic-unfetch'
+
+import withRedux from 'next-redux-wrapper'
+
+import {
+  initStore,
+  updateShowDetails,
+} from '../redux/store'
 
 const Post = ({ canonical, show, title }) => (
     <Layout title={title} canonical={canonical}>
@@ -34,18 +17,18 @@ const Post = ({ canonical, show, title }) => (
 )
 
 Post.getInitialProps = async function (context) {
+  const { store } = context
   const { id } = context.query
-  console.log(context.query)
-  const res = await fetch(`https://api.tvmaze.com/shows/${id}`)
-  const show = await res.json()
 
-  console.log(`Fetched show: ${show.name}`)
+  await store.dispatch(updateShowDetails(id))
+
+  console.log(`Fetched show: ${store.getState().showDetails[id].name}`)
 
   return {
-    show,
+    show: store.getState().showDetails[id],
     canonical: `post-${id}`,
     title: id,
   }
 }
 
-export default Post
+export default  withRedux(initStore)(Post)
