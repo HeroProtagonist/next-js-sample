@@ -1,7 +1,12 @@
-import Layout from '../components/Layout.js'
 import Link from 'next/link'
+import withRedux from 'next-redux-wrapper'
 
-import fetch from 'isomorphic-unfetch'
+import {
+  initStore,
+  updateShowList,
+} from '../redux/store'
+
+import Layout from '../components/Layout.js'
 
 const Index = (props) => (
   <Layout title="next-index" canonical="index">
@@ -18,15 +23,36 @@ const Index = (props) => (
   </Layout>
 )
 
-Index.getInitialProps = async function() {
-  const res = await fetch('https://api.tvmaze.com/search/shows?q=batman')
-  const data = await res.json()
+Index.getInitialProps = async function({ store, isServer }) {
 
-  console.log(`Show data fetched. Count: ${data.length}`)
+  // check state here
+  const showList = store.getState().showList
+  if (showList) {
+    return {
+      shows: showList
+    }
+  }
+  await store.dispatch(updateShowList())
+
+  console.log(`Show data fetched. Count: ${store.getState().showList.length}`)
 
   return {
-    shows: data
+    shows: store.getState().showList
   }
 }
 
-export default Index
+// get initial props vs mapStateToProps
+
+// const mapStateToProps = state => {
+//   return {
+//     shows: state.showList || [],
+//   }
+// }
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     updateShowList: list => dispatch(updateShowList(list)),
+//   }
+// }
+
+export default withRedux(initStore)(Index)
