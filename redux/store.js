@@ -38,6 +38,14 @@ const modalVisible = (state = false, action) => {
   }
 }
 
+const currentId = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.TOGGLE_MODAL:
+      return action.id || null
+    default:
+      return state
+  }
+}
 
 // ACTIONS
 export const updateShowList = () => async dispatch => {
@@ -62,15 +70,19 @@ export const updateShowDetails = id => async dispatch => {
   })
 }
 
-export const toggleModal = id => dispatch => {
+export const toggleModal = id => async dispatch => {
   let replaceUrl = 'http://localhost:8000'
-console.log(id)
-  if (id) replaceUrl = `http://localhost:8000/p/${id}`
+
+  if (id) {
+    await dispatch(updateShowDetails(id))
+    replaceUrl = `http://localhost:8000/p/${id}`
+  }
 
   window.history.pushState('data to be passed', 'Title of the page', replaceUrl)
 
   return dispatch({
     type: actionTypes.TOGGLE_MODAL,
+    id,
   })
 }
 
@@ -78,12 +90,15 @@ const rootReducer = combineReducers({
   showDetails,
   showList,
   modalVisible,
+  currentId,
 })
 
 
 const exampleInitialState = {
   showDetails: null,
   showList: null,
+  modalVisible: null,
+  currentId: null,
 }
 
 export const initStore = (initialState = initialState) => {
