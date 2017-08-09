@@ -1,4 +1,4 @@
-import Header from '../comps/Header'
+import Header from '../components/Header'
 import Layout from '../components/Layout.js'
 
 export default () => (

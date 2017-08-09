@@ -6,17 +6,20 @@ import {
   updateShowList,
 } from '../redux/store'
 
-import Layout from '../components/Layout.js'
+import Layout from '../components/Layout'
+import Modal from '../components/Modal'
 
 const Index = (props) => (
   <Layout title="next-index" canonical="index">
     <h1>Batman TV Shows</h1>
+    <Modal />
     <ul>
       {props.shows.map(({show}) => (
         <li key={show.id}>
-          <Link as={`/p/${show.id}`} href={`/post?id=${show.id}`}>
+          <a href='#'>{show.name}</a>
+          {/*<Link as={`/p/${show.id}`} href={`/post?id=${show.id}`}>
             <a>{show.name}</a>
-          </Link>
+          </Link>*/}
         </li>
       ))}
     </ul>
