@@ -1,9 +1,12 @@
 const Modal = props => {
+  if (!props.show) return null
   return (
     <div id="myModal" className="modal" style={{display: props.visible ? 'block' : 'none'}}>
       <div className="modal-content">
         <span className="close" onClick={() => props.toggleModal()}>&times;</span>
-        <p>Some text in the Modal..</p>
+        <h1>{props.show.name}</h1>
+        <p>{props.show.summary.replace(/<[/]?p>/g, '')}</p>
+        <img src={props.show.image.medium}/>
       </div>
       <style jsx>{`
         /* The Modal (background) */
