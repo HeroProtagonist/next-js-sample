@@ -1,8 +1,8 @@
 const Modal = props => {
   return (
-    <div id="myModal" className="modal">
+    <div id="myModal" className="modal" style={{display: props.visible ? 'block' : 'none'}}>
       <div className="modal-content">
-        <span className="close">&times;</span>
+        <span className="close" onClick={props.toggleModal}>&times;</span>
         <p>Some text in the Modal..</p>
       </div>
       <style jsx>{`
