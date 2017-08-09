@@ -13,7 +13,11 @@ import Modal from '../components/Modal'
 const Index = (props) => (
   <Layout title="next-index" canonical="index">
     <h1>Batman TV Shows</h1>
-    <Modal visible={props.modalVisible} toggleModal={props.toggleModal}/>
+    <Modal
+      visible={props.modalVisible}
+      toggleModal={props.toggleModal}
+      show={props.showDetails[props.currentId]}
+    />
     <ul>
       {props.shows.map(({show}) => (
         <li key={show.id}>
@@ -54,6 +58,8 @@ Index.getInitialProps = async function({ store, isServer }) {
 const mapStateToProps = state => {
   return {
     modalVisible: state.modalVisible,
+    currentId: state.currentId,
+    showDetails: state.showDetails || {},
   }
 }
 
