@@ -6,6 +6,7 @@ import fetch from 'isomorphic-unfetch'
 const actionTypes = {
   SHOW_LIST_SUCCESS: 'SHOW_LIST_SUCCESS',
   SHOW_DETAILS_SUCCESS: 'SHOW_DETAILS_SUCCESS',
+  TOGGLE_MODAL: 'TOGGLE_MODAL',
 }
 
 // REDUCERS
@@ -27,6 +28,16 @@ const showDetails = (state = null, action) => {
   }
 }
 
+const modalVisible = (state = false, action) => {
+  switch (action.type) {
+    case actionTypes.TOGGLE_MODAL:
+      return !state
+    default:
+      return state
+  }
+}
+
+
 // ACTIONS
 export const updateShowList = () => async dispatch => {
   const res = await fetch('https://api.tvmaze.com/search/shows?q=batman')
@@ -37,7 +48,6 @@ export const updateShowList = () => async dispatch => {
     list: data,
   })
 }
-
 
 export const updateShowDetails = id => async dispatch => {
 
@@ -51,9 +61,16 @@ export const updateShowDetails = id => async dispatch => {
   })
 }
 
+export const toggleModal = () => dispatch => {
+  dispatch({
+    type: actionTypes.TOGGLE_MODAL,
+  })
+}
+
 const rootReducer = combineReducers({
   showDetails,
   showList,
+  modalVisible,
 })
 
 
