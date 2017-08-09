@@ -20,6 +20,16 @@ Post.getInitialProps = async function (context) {
   const { store } = context
   const { id } = context.query
 
+  // check state here
+  const showDetails = store.getState().showDetails
+  console.log(showDetails)
+  if (showDetails && showDetails[id]) {
+    return {
+      show: showDetails[id],
+      canonical: `post-${id}`,
+      title: id,
+    }
+  }
   await store.dispatch(updateShowDetails(id))
 
   console.log(`Fetched show: ${store.getState().showDetails[id].name}`)
