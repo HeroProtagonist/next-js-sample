@@ -22,7 +22,7 @@ Post.getInitialProps = async function (context) {
 
   // check state here
   const showDetails = store.getState().showDetails
-  console.log(showDetails)
+
   if (showDetails && showDetails[id]) {
     return {
       show: showDetails[id],
