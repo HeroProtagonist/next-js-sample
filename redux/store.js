@@ -2,7 +2,6 @@ import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import fetch from 'isomorphic-unfetch'
-import Router from 'next/router'
 
 const actionTypes = {
   SHOW_LIST_SUCCESS: 'SHOW_LIST_SUCCESS',
@@ -71,14 +70,7 @@ export const updateShowDetails = id => async dispatch => {
 }
 
 export const toggleModal = id => async dispatch => {
-  let replaceUrl = 'http://localhost:8000'
-
-  if (id) {
-    await dispatch(updateShowDetails(id))
-    replaceUrl = `http://localhost:8000/p/${id}`
-  }
-
-  window.history.pushState('data to be passed', 'Title of the page', replaceUrl)
+  if (id) await dispatch(updateShowDetails(id))
 
   return dispatch({
     type: actionTypes.TOGGLE_MODAL,
