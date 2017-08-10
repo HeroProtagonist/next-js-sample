@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import withRedux from 'next-redux-wrapper'
+import Router from 'next/router'
 
 import {
   initStore,
@@ -21,11 +22,12 @@ const Index = (props) => (
     <ul>
       {props.shows.map(({show}) => (
         <li key={show.id}>
-          <button
-            onClick={() => props.toggleModal(show.id)}
+          <a
+            href={`/p/${show.id}`}
+            onClick={e => props.toggleModal(e, show.id)}
           >
             {show.name}
-          </button>
+          </a>
           {/*<Link as={`/p/${show.id}`} href={`/post?id=${show.id}`}>
             <a>{show.name}</a>
           </Link>*/}
@@ -65,7 +67,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleModal: id => dispatch(toggleModal(id)),
+    toggleModal: (e, id) => {
+      e.preventDefault()
+
+      if (id) {
+        Router.push(`/?photoId=${id}`, `/p/${id}`)
+      } else {
+        Router.push('/')
+      }
+      dispatch(toggleModal(id))
+    },
   }
 }
 
