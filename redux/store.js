@@ -69,8 +69,10 @@ export const updateShowDetails = id => async dispatch => {
   })
 }
 
-export const toggleModal = id => async dispatch => {
-  if (id) await dispatch(updateShowDetails(id))
+export const toggleModal = id => async (dispatch, getState) => {
+  const { showDetails } = getState()
+
+  if (id && !showDetails[id]) await dispatch(updateShowDetails(id))
 
   return dispatch({
     type: actionTypes.TOGGLE_MODAL,
